@@ -1,0 +1,6 @@
+
+<RCC>
+    <qresource prefix="/net/kirgroup/QtMixer">
+        <file>qmldir</file>
+    </qresource>
+</RCC>

@@ -1,2 +1,0 @@
-INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtMixer
-LIBS += -l$$qtLibraryTarget(QtMixer)
