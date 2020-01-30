@@ -11,6 +11,7 @@ QAudioDecoderStream::QAudioDecoderStream(const QString &fileName, const QAudioFo
 	, m_state(QtMixer::Stopped)
 	, m_loops(0)
 	, m_remainingLoops(0)
+    , m_volume(1.0)
 {
 	setOpenMode(QIODevice::ReadOnly);
 
@@ -56,6 +57,12 @@ qint64 QAudioDecoderStream::readData(char *data, qint64 maxlen)
 				}
 			}
 		}
+
+        if (m_volume < 1.0) {
+           for(qint64 i=0; i<maxlen; i++) {
+               data[i] = data[i] * m_volume;
+           }
+        }
 	}
 
 	return maxlen;
@@ -159,4 +166,14 @@ int QAudioDecoderStream::length()
 		/ (m_format.sampleSize() / 8)
 		/ (m_format.sampleRate() / 1000)
 		/ (m_format.channelCount());
+}
+
+qreal QAudioDecoderStream::volume() const
+{
+    return m_volume;
+}
+
+void QAudioDecoderStream::setVolume(qreal volume)
+{
+    m_volume = volume;
 }

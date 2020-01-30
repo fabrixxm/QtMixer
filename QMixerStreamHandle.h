@@ -29,6 +29,9 @@ class QTMIXER_EXPORT QMixerStreamHandle
 
 		int length() const;
 
+        qreal volume() const;
+        void setVolume(qreal volume);
+
 		bool operator ==(const QMixerStreamHandle &other) const;
 
 	private:

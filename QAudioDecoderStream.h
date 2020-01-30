@@ -29,6 +29,9 @@ class QAudioDecoderStream : public QAbstractMixerStream
 
 		int length() override;
 
+        qreal volume() const override;
+        void setVolume(qreal volume) override;
+
 	protected:
 		qint64 readData(char *data, qint64 maxlen) override;
 		qint64 writeData(const char *data, qint64 len) override;
@@ -49,6 +52,7 @@ class QAudioDecoderStream : public QAbstractMixerStream
 
 		int m_loops;
 		int m_remainingLoops;
+        qreal m_volume;
 };
 
 #endif // QAUDIODECODERSTREAM_H

@@ -27,6 +27,9 @@ class QAbstractMixerStream : public QIODevice
 
 		virtual int length() = 0;
 
+        virtual qreal volume() const = 0;
+        virtual void setVolume(qreal volume) = 0;
+
 	private:
 		void removeFrom(QList<QAbstractMixerStream *> &streams)
 		{
