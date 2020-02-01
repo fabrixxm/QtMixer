@@ -10,22 +10,26 @@ INCLUDEPATH += \
     $$PWD/src
 
 SOURCES += \
+    $$PWD/src/quickmixer.cpp \
+    $$PWD/src/quickmixerstream.cpp \
     $$PWD/src/QAudioDecoderStream.cpp \
     $$PWD/src/QMixerStream.cpp \
     $$PWD/src/QMixerStreamHandle.cpp \
     $$PWD/src/QMixerStream_p.cpp
 
-HEADERS = \
+HEADERS += \
     $$PWD/qpm.h \
-    $$PWD/register_quickdownload.h \
+    $$PWD/src/quickmixer.h \
+    $$PWD/src/quickmixerstream.h \
+    $$PWD/register_quickmixer.h \
     $$PWD/src/QMixerStream.h \
     $$PWD/src/QMixerStreamHandle.h \
     $$PWD/src/QtMixer.h \
     $$PWD/src/QMixerStream \
-    $$PWD/src/QMixerStreamHandle
+    $$PWD/src/QMixerStreamHandle \
     $$PWD/src/QAudioDecoderStream.h \
-    $$PWD/src/QAbstractMixerStream.h \
-    $$PWD/src/QMixerStream_p.h
+    $$PWD/src/QMixerStream_p.h \
+    $$PWD/src/QAbstractMixerStream.h
 
 DISTFILES += \
     $$PWD/README.md \
@@ -40,3 +44,4 @@ exists(.git) {
         message("Mixer branch $$GIT_BRANCH_NAME")
     }
 }
+

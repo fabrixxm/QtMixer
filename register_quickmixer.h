@@ -4,11 +4,13 @@
 #include <QtCore/QCoreApplication>
 #include <QtQml/QQmlEngine>
 
-// #include "src/quickdownload.h"
+#include "src/quickmixer.h"
+#include "src/quickmixerstream.h"
+
 
 static void registerQuickMixer() {
-    //qmlRegisterType<QuickMixer>("net.kirgroup.Mixer", 1, 0, "Mixer");
-    //qmlRegisterType<QuickMixerStream>("net.kirgroup.Mixer", 1, 0, "MixerStream");
+    qmlRegisterType<QuickMixer>("net.kirgroup.Mixer", 1, 0, "Mixer");
+    qmlRegisterType<QuickMixerStream>("net.kirgroup.Mixer", 1, 0, "MixerStream");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerQuickMixer)
