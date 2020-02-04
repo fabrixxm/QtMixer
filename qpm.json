@@ -14,5 +14,5 @@
   "dependencies": [
   ],
   "license": "GPL_2_0",
-  "priFilename": "net_kirgroup_mixer.pri"
+  "priFilename": "net_kirgroup_mixer.pri",
 }
