@@ -25,8 +25,6 @@ HEADERS += \
     $$PWD/src/QMixerStream.h \
     $$PWD/src/QMixerStreamHandle.h \
     $$PWD/src/QtMixer.h \
-    $$PWD/src/QMixerStream \
-    $$PWD/src/QMixerStreamHandle \
     $$PWD/src/QAudioDecoderStream.h \
     $$PWD/src/QMixerStream_p.h \
     $$PWD/src/QAbstractMixerStream.h
