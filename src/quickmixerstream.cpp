@@ -2,9 +2,8 @@
 #include "quickmixer.h"
 #include <QDebug>
 
-QuickMixerStream::QuickMixerStream(QuickMixer *parent)
+QuickMixerStream::QuickMixerStream(QObject *parent)
     : QObject(parent)
-    , m_mixer(parent->getMixer())
     , m_created(false)
     , m_loops(0)
     , m_volume(1)
@@ -37,17 +36,22 @@ QString QuickMixerStream::getSource() const
 
 void QuickMixerStream::setSource(QString source)
 {
-    m_source = source;
-    if (m_created == false) {
-        m_handle = m_mixer->openStream(source);
-    } else {
-        m_mixer->closeStream(m_handle);
-        m_handle = m_mixer->openStream(source);
+    QuickMixer *m_quickmixer = (QuickMixer *) parent();
+    Q_ASSERT(m_quickmixer);
+    QMixerStream *m_mixerstream = m_quickmixer->getMixer();
+
+    if (m_mixerstream != NULL) {
+        if (m_created == false) {
+            m_handle = m_mixerstream->openStream(source);
+        } else {
+            m_mixerstream->closeStream(m_handle);
+            m_handle = m_mixerstream->openStream(source);
+        }
+        m_created = true;
+        m_handle.setLoops(m_loops);
+        m_handle.setVolume(m_volume);
+        setPause(m_paused);
     }
-    m_handle.setLoops(m_loops);
-    m_handle.setVolume(m_volume);
-    setPause(m_paused);
-    m_created = true;
 }
 
 qreal QuickMixerStream::getVolume() const
@@ -122,6 +126,7 @@ void QuickMixerStream::stop()
 
 void QuickMixerStream::onHandleStateChange(QMixerStreamHandle handle, QtMixer::State state)
 {
+    Q_UNUSED(handle);
     switch(state) {
     case QtMixer::Paused:
         pauseChanged();

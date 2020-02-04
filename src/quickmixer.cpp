@@ -1,19 +1,25 @@
 #include "quickmixer.h"
+#include <QDebug>
 
 #if defined(QUICKMIXER_AUTO_REGISTER)
 #include "register_quickmixer.h"
 #endif
 
-QuickMixer::QuickMixer(QObject *parent) : QObject(parent)
+QuickMixer::QuickMixer(QObject *parent)
+    : QObject(parent)
+    , m_mixerstream(NULL)
 {
     const QAudioDeviceInfo &device = QAudioDeviceInfo::defaultOutputDevice();
     const QAudioFormat &audioFormat = device.preferredFormat();
 
 
-    m_stream = new QMixerStream(audioFormat);
+    m_mixerstream = new QMixerStream(audioFormat);
     m_output = new QAudioOutput(device, audioFormat);
-    m_output->start(m_stream);
+    m_output->start(m_mixerstream);
     m_output->suspend();
+
+    connect(m_output, &QAudioOutput::stateChanged, this, &QuickMixer::outputStateChanged);
+    connect(m_mixerstream, &QMixerStream::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
 }
 
 
@@ -39,6 +45,7 @@ bool QuickMixer::isPaused() const
 
 void QuickMixer::setPause(bool pause)
 {
+    qDebug() << "setPause " << pause;
     if (pause) {
         m_output->suspend();
     } else {
@@ -64,7 +71,7 @@ int QuickMixer::getState() const
 
 QMixerStream *QuickMixer::getMixer()
 {
-    return m_stream;
+    return m_mixerstream;
 }
 
 void QuickMixer::pause()
@@ -79,13 +86,22 @@ void QuickMixer::play()
 
 void QuickMixer::outputStateChanged(QAudio::State state)
 {
-
     switch(state) {
-        case QAudio::ActiveState:
-        case QAudio::SuspendedState:
-            pauseChanged();
+    case QAudio::StoppedState:
+    case QAudio::IdleState:
+    case QAudio::InterruptedState:
         break;
+    case QAudio::ActiveState:
+    case QAudio::SuspendedState:
+        pauseChanged();
+    break;
     }
 
     stateChanged();
+}
+
+void QuickMixer::onMixerStreamStateChanged(QMixerStreamHandle handle, QtMixer::State state)
+{
+    Q_UNUSED(handle);
+    qDebug() << "onMixerStreamStateChanged() " << state;
 }

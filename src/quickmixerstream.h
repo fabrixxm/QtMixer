@@ -2,7 +2,7 @@
 #define QUICKMIXERSTREAM_H
 
 #include <QObject>
-#include <QMixerStreamHandle>
+#include <QMixerStreamHandle.h>
 
 class QuickMixer;
 
@@ -18,7 +18,7 @@ class QuickMixerStream : public QObject
     Q_PROPERTY(int state READ getState NOTIFY stateChanged)
 
 public:
-    explicit QuickMixerStream(QuickMixer *parent = nullptr);
+    explicit QuickMixerStream(QObject *parent = nullptr);
 
     bool isPaused() const;
     void setPause(bool pause);
@@ -50,7 +50,6 @@ signals:
     void stateChanged();
 
 private:
-    QMixerStream *m_mixer;
     QMixerStreamHandle m_handle;
     bool m_created;
     int mutable m_loops;
