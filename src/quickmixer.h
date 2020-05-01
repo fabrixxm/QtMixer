@@ -10,75 +10,76 @@
 #include "quickmixerstream.h"
 
 /**
-  \todo FIX DOCS!
+	\todo FIX DOCS!
 
-  QML Interface to QAudioOutput and QtMixerStream.
+	QML Interface to QAudioOutput and QtMixerStream.
 
-  To be used with QuickMixerStream
+	To be used with QuickMixerStream
 
-  Mixer {
-    volume: 1.0
+	Mixer {
+		volume: 1.0
 
-    paused: true
-    // .pause() / .play()
+		paused: true
+		// .pause() / .play()
 
-    // state
+		// state
 
-    MixerStream {
-        src: "file.mp3"
-        volume: 1.0
-        loop: -1
-        paused: true
+		MixerStream {
+			src: "file.mp3"
+			volume: 1.0
+			loop: -1
+			paused: true
 
-        // .play() / .pause()
+			// .play() / .pause()
 
-    }
-  }
+		}
+	}
 
 */
 class QuickMixer : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    Q_PROPERTY(bool paused READ isPaused WRITE setPause NOTIFY pauseChanged)
-    Q_PROPERTY(qreal volume READ getVolume WRITE setVolume NOTIFY volumeChanged)
-    Q_PROPERTY(int state READ getState NOTIFY stateChanged)
-    Q_PROPERTY(QQmlListProperty<QuickMixerStream> streams READ streams)
+	Q_PROPERTY(bool paused READ isPaused WRITE setPause NOTIFY pauseChanged)
+	Q_PROPERTY(qreal volume READ getVolume WRITE setVolume NOTIFY volumeChanged)
+	Q_PROPERTY(int state READ getState NOTIFY stateChanged)
+	Q_PROPERTY(QQmlListProperty<QuickMixerStream> streams READ streams)
 
-    Q_CLASSINFO("DefaultProperty", "streams")
+	Q_CLASSINFO("DefaultProperty", "streams")
 
 public:
-    explicit QuickMixer(QObject *parent = nullptr);
+	explicit QuickMixer(QObject *parent = nullptr);
+	~QuickMixer();
 
-    QQmlListProperty<QuickMixerStream> streams();
-    int streamsCount() const;
-    QuickMixerStream *stream(int) const;
+	QQmlListProperty<QuickMixerStream> streams();
+	int streamsCount() const;
+	QuickMixerStream *stream(int) const;
 
-    bool isPaused() const;
-    void setPause(bool pause);
-    qreal getVolume() const;
-    void setVolume(qreal volume);
-    int getState() const;
+	bool isPaused() const;
+	void setPause(bool pause);
+	qreal getVolume() const;
+	void setVolume(qreal volume);
+	int getState() const;
 
-    QMixerStream *getMixer();
+	QMixerStream *getMixer();
 
 public slots:
-    void pause();
-    void play();
+	void pause();
+	void play();
 
 private slots:
-    void outputStateChanged(QAudio::State state);
-    void onMixerStreamStateChanged(QMixerStreamHandle handle, QtMixer::State state);
+	void outputStateChanged(QAudio::State state);
+	void onMixerStreamStateChanged(QMixerStreamHandle handle, QtMixer::State state);
 
 signals:
-    void pauseChanged();
-    void volumeChanged();
-    void stateChanged();
+	void pauseChanged();
+	void volumeChanged();
+	void stateChanged();
 
 private:
-    QMixerStream *m_mixerstream;
-    QAudioOutput *m_output;
-    QList<QuickMixerStream *> m_streams;
+	QMixerStream *m_mixerstream;
+	QAudioOutput *m_output;
+	QList<QuickMixerStream *> m_streams;
 };
 
 #endif // QUICKMIXER_H

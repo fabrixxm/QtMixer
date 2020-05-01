@@ -9,8 +9,8 @@
 
 
 static void registerQuickMixer() {
-    qmlRegisterType<QuickMixer>("net.kirgroup.mixer", 1, 0, "Mixer");
-    qmlRegisterType<QuickMixerStream>("net.kirgroup.mixer", 1, 0, "MixerStream");
+	qmlRegisterType<QuickMixer>("net.kirgroup.mixer", 1, 0, "Mixer");
+	qmlRegisterType<QuickMixerStream>("net.kirgroup.mixer", 1, 0, "MixerStream");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerQuickMixer)

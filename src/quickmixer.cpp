@@ -6,102 +6,113 @@
 #endif
 
 QuickMixer::QuickMixer(QObject *parent)
-    : QObject(parent)
-    , m_mixerstream(NULL)
+	: QObject(parent)
+	, m_mixerstream(NULL)
 {
-    const QAudioDeviceInfo &device = QAudioDeviceInfo::defaultOutputDevice();
-    const QAudioFormat &audioFormat = device.preferredFormat();
+	const QAudioDeviceInfo &device = QAudioDeviceInfo::defaultOutputDevice();
+	const QAudioFormat &audioFormat = device.preferredFormat();
+
+	qDebug() << audioFormat;
 
 
-    m_mixerstream = new QMixerStream(audioFormat);
-    m_output = new QAudioOutput(device, audioFormat);
-    m_output->start(m_mixerstream);
-    m_output->suspend();
+	m_mixerstream = new QMixerStream(audioFormat);
+	m_output = new QAudioOutput(device, audioFormat, this);
+	m_output->setVolume(1);
+	m_output->start(m_mixerstream);
+	//m_output->suspend();
 
-    connect(m_output, &QAudioOutput::stateChanged, this, &QuickMixer::outputStateChanged);
-    connect(m_mixerstream, &QMixerStream::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
+	connect(m_output, &QAudioOutput::stateChanged, this, &QuickMixer::outputStateChanged);
+	connect(m_mixerstream, &QMixerStream::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
+}
+
+QuickMixer::~QuickMixer()
+{
+	foreach (auto astream, m_streams) {
+		astream->close();
+	}
+	m_output->stop();
 }
 
 
 QQmlListProperty<QuickMixerStream> QuickMixer::streams()
 {
-    return {this, m_streams};
+	return {this, m_streams};
 }
 
 int QuickMixer::streamsCount() const
 {
-    return m_streams.count();
+	return m_streams.count();
 }
 
 QuickMixerStream *QuickMixer::stream(int index) const
 {
-    return m_streams.at(index);
+	return m_streams.at(index);
 }
 
 bool QuickMixer::isPaused() const
 {
-    return m_output->state() == QAudio::SuspendedState;
+	return m_output->state() == QAudio::SuspendedState;
 }
 
 void QuickMixer::setPause(bool pause)
 {
-    qDebug() << "setPause " << pause;
-    if (pause) {
-        m_output->suspend();
-    } else {
-        m_output->resume();
-    }
+	qDebug() << "setPause " << pause;
+	if (pause) {
+		m_output->suspend();
+	} else {
+		m_output->resume();
+	}
 }
 
 qreal QuickMixer::getVolume() const
 {
-    return m_output->volume();
+	return m_output->volume();
 }
 
 void QuickMixer::setVolume(qreal volume)
 {
-    m_output->setVolume(volume);
-    volumeChanged();
+	m_output->setVolume(volume);
+	volumeChanged();
 }
 
 int QuickMixer::getState() const
 {
-    return m_output->state();
+	return m_output->state();
 }
 
 QMixerStream *QuickMixer::getMixer()
 {
-    return m_mixerstream;
+	return m_mixerstream;
 }
 
 void QuickMixer::pause()
 {
-    setPause(true);
+	setPause(true);
 }
 
 void QuickMixer::play()
 {
-    setPause(false);
+	setPause(false);
 }
 
 void QuickMixer::outputStateChanged(QAudio::State state)
 {
-    switch(state) {
-    case QAudio::StoppedState:
-    case QAudio::IdleState:
-    case QAudio::InterruptedState:
-        break;
-    case QAudio::ActiveState:
-    case QAudio::SuspendedState:
-        pauseChanged();
-    break;
-    }
+	switch(state) {
+	case QAudio::StoppedState:
+	case QAudio::IdleState:
+	//case QAudio::InterruptedState:
+		break;
+	case QAudio::ActiveState:
+	case QAudio::SuspendedState:
+		pauseChanged();
+	break;
+	}
 
-    stateChanged();
+	stateChanged();
 }
 
 void QuickMixer::onMixerStreamStateChanged(QMixerStreamHandle handle, QtMixer::State state)
 {
-    Q_UNUSED(handle);
-    qDebug() << "onMixerStreamStateChanged() " << state;
+	Q_UNUSED(handle);
+	qDebug() << "onMixerStreamStateChanged() " << state;
 }

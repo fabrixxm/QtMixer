@@ -78,16 +78,16 @@ int QMixerStreamHandle::length() const
 
 qreal QMixerStreamHandle::volume() const
 {
-    Q_ASSERT(m_stream);
+	Q_ASSERT(m_stream);
 
-    return m_stream->volume();
+	return m_stream->volume();
 }
 
 void QMixerStreamHandle::setVolume(qreal volume)
 {
-    Q_ASSERT(m_stream);
+	Q_ASSERT(m_stream);
 
-    m_stream->setVolume(volume);
+	m_stream->setVolume(volume);
 }
 
 bool QMixerStreamHandle::operator ==(const QMixerStreamHandle &other) const
