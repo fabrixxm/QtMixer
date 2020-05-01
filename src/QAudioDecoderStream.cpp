@@ -57,12 +57,6 @@ qint64 QAudioDecoderStream::readData(char *data, qint64 maxlen)
 				}
 			}
 		}
-
-        if (m_volume < 1.0) {
-           for(qint64 i=0; i<maxlen; i++) {
-               data[i] = data[i] * m_volume;
-           }
-        }
 	}
 
 	return maxlen;

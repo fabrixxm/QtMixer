@@ -57,7 +57,7 @@ qint64 QMixerStream::readData(char *data, qint64 maxlen)
 		{
 			if (stream->read((char *)&sample, depth))
 			{
-				*cursor = mix(*cursor, sample);
+				*cursor = mix(*cursor, sample * stream->volume());
 			}
 		}
 
