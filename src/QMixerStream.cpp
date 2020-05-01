@@ -80,14 +80,14 @@ qint64 QMixerStream::writeData(const char *data, qint64 len)
 
 qint16 QMixerStream::mix(qint32 sample1, qint32 sample2)
 {
-	const qint32 result = sample1 + sample2;
+	const qint32 result = (sample1 + sample2) / 2;
 
 	if (Range::max() < result)
 	{
 		return Range::max();
 	}
 
-	if (Range::min() > result)
+	if (result < Range::min())
 	{
 		return Range::min();
 	}
