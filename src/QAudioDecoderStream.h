@@ -8,6 +8,18 @@
 
 #include "QAbstractMixerStream.h"
 
+/**
+ * @brief The QAudioDecoderStream class read and decode audio data from file.
+ *
+ * It's the source of data for a mixer channel
+ * It knows about loops and volume.
+ *
+ * loops can be set to 0 (no loops), -1 (infinite loops) , n > 0 (fixed number of loops)
+ *
+ * volume is used by mixer when mixing audio data (see QMixerStream::mix() )
+ *
+ */
+
 class QAudioDecoderStream : public QAbstractMixerStream
 {
 	public:
@@ -29,8 +41,8 @@ class QAudioDecoderStream : public QAbstractMixerStream
 
 		int length() override;
 
-        qreal volume() const override;
-        void setVolume(qreal volume) override;
+		qreal volume() const override;
+		void setVolume(qreal volume) override;
 
 	protected:
 		qint64 readData(char *data, qint64 maxlen) override;
