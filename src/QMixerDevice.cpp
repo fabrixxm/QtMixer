@@ -3,32 +3,32 @@
 #include <QAudioDecoder>
 #include <QBuffer>
 
-#include "QMixerStream.h"
+#include "QMixerDevice.h"
 #include "QAudioDecoderStream.h"
 #include "QMixerStreamHandle.h"
 #include "QAbstractMixerStream.h"
-#include "QMixerStream_p.h"
+#include "QMixerDevice_p.h"
 
-QMixerStream::QMixerStream(const QAudioFormat &format)
-	: d_ptr(new QMixerStreamPrivate(format))
+QMixerDevice::QMixerDevice(const QAudioFormat &format)
+	: d_ptr(new QMixerDevicePrivate(format))
 {
 	setOpenMode(QIODevice::ReadOnly);
 }
 
-QMixerStreamHandle QMixerStream::openStream(const QString &fileName)
+QMixerStreamHandle QMixerDevice::openStream(const QString &fileName)
 {
 	QAudioDecoderStream *stream = new QAudioDecoderStream(fileName, d_ptr->m_format);
 	QMixerStreamHandle handle(stream);
 
 	d_ptr->m_streams << stream;
 
-	connect(stream, &QAbstractMixerStream::stateChanged, this, &QMixerStream::stateChanged);
-	connect(stream, &QAbstractMixerStream::decodingFinished, this, &QMixerStream::decodingFinished);
+	connect(stream, &QAbstractMixerStream::stateChanged, this, &QMixerDevice::stateChanged);
+	connect(stream, &QAbstractMixerStream::decodingFinished, this, &QMixerDevice::decodingFinished);
 
 	return handle;
 }
 
-void QMixerStream::closeStream(const QMixerStreamHandle &handle)
+void QMixerDevice::closeStream(const QMixerStreamHandle &handle)
 {
 	QAbstractMixerStream *stream = handle.m_stream;
 
@@ -39,7 +39,7 @@ void QMixerStream::closeStream(const QMixerStreamHandle &handle)
 	}
 }
 
-qint64 QMixerStream::readData(char *data, qint64 maxlen)
+qint64 QMixerDevice::readData(char *data, qint64 maxlen)
 {
 	memset(data, 0, maxlen);
 
@@ -70,7 +70,7 @@ qint64 QMixerStream::readData(char *data, qint64 maxlen)
 	return maxlen;
 }
 
-qint64 QMixerStream::writeData(const char *data, qint64 len)
+qint64 QMixerDevice::writeData(const char *data, qint64 len)
 {
 	Q_UNUSED(data);
 	Q_UNUSED(len);
@@ -78,9 +78,9 @@ qint64 QMixerStream::writeData(const char *data, qint64 len)
 	return 0;
 }
 
-qint16 QMixerStream::mix(qint32 sample1, qint32 sample2)
+qint16 QMixerDevice::mix(qint32 sample1, qint32 sample2)
 {
-	const qint32 result = (sample1 + sample2) / 2;
+	const qint32 result = (sample1 + sample2); // / 2;
 
 	if (Range::max() < result)
 	{

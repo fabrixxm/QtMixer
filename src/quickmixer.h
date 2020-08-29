@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include <QAudioOutput>
-#include <QMixerStream.h>
+#include <QMixerDevice.h>
 #include <QMixerStreamHandle.h>
 
 #include "quickmixerstream.h"
@@ -61,7 +61,7 @@ public:
 	void setVolume(qreal volume);
 	int getState() const;
 
-	QMixerStream *getMixer();
+	QMixerDevice *getMixer();
 
 public slots:
 	void pause();
@@ -77,7 +77,7 @@ signals:
 	void stateChanged();
 
 private:
-	QMixerStream *m_mixerstream;
+	QMixerDevice *m_mixerstream;
 	QAudioOutput *m_output;
 	QList<QuickMixerStream *> m_streams;
 };

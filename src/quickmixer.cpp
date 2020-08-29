@@ -15,14 +15,14 @@ QuickMixer::QuickMixer(QObject *parent)
 	qDebug() << audioFormat;
 
 
-	m_mixerstream = new QMixerStream(audioFormat);
+	m_mixerstream = new QMixerDevice(audioFormat);
 	m_output = new QAudioOutput(device, audioFormat, this);
 	m_output->setVolume(1);
 	m_output->start(m_mixerstream);
 	//m_output->suspend();
 
 	connect(m_output, &QAudioOutput::stateChanged, this, &QuickMixer::outputStateChanged);
-	connect(m_mixerstream, &QMixerStream::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
+	connect(m_mixerstream, &QMixerDevice::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
 }
 
 QuickMixer::~QuickMixer()
@@ -80,7 +80,7 @@ int QuickMixer::getState() const
 	return m_output->state();
 }
 
-QMixerStream *QuickMixer::getMixer()
+QMixerDevice *QuickMixer::getMixer()
 {
 	return m_mixerstream;
 }

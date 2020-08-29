@@ -9,14 +9,13 @@
 
 typedef std::numeric_limits<qint16> Range;
 
-class QMixerStreamPrivate;
-
-class QTMIXER_EXPORT QMixerStream : public QIODevice
+class QMixerDevicePrivate;
+class QTMIXER_EXPORT QMixerDevice : public QIODevice
 {
 	Q_OBJECT
 
 	public:
-		QMixerStream(const QAudioFormat &format);
+		QMixerDevice(const QAudioFormat &format);
 
 		QMixerStreamHandle openStream(const QString &fileName);
 
@@ -29,7 +28,7 @@ class QTMIXER_EXPORT QMixerStream : public QIODevice
 	private:
 		qint16 mix(qint32 sample1, qint32 sample2);
 
-		QMixerStreamPrivate *d_ptr;
+		QMixerDevicePrivate *d_ptr;
 
 	signals:
 		void stateChanged(QMixerStreamHandle handle, QtMixer::State state);

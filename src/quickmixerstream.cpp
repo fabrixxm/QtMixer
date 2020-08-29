@@ -38,14 +38,14 @@ void QuickMixerStream::setSource(QString source)
 {
 	QuickMixer *m_quickmixer = (QuickMixer *) parent();
 	Q_ASSERT(m_quickmixer);
-	QMixerStream *m_mixerstream = m_quickmixer->getMixer();
+	QMixerDevice *m_mixer = m_quickmixer->getMixer();
 
-	if (m_mixerstream != NULL) {
+	if (m_mixer != NULL) {
 		if (m_created == false) {
-			m_handle = m_mixerstream->openStream(source);
+			m_handle = m_mixer->openStream(source);
 		} else {
-			m_mixerstream->closeStream(m_handle);
-			m_handle = m_mixerstream->openStream(source);
+			m_mixer->closeStream(m_handle);
+			m_handle = m_mixer->openStream(source);
 		}
 		m_created = true;
 		m_handle.setLoops(m_loops);
@@ -117,7 +117,7 @@ void QuickMixerStream::close()
 	if (m_created) {
 		QuickMixer *m_quickmixer = (QuickMixer *) parent();
 		Q_ASSERT(m_quickmixer);
-		QMixerStream *m_mixerstream = m_quickmixer->getMixer();
+		QMixerDevice *m_mixerstream = m_quickmixer->getMixer();
 		m_mixerstream->closeStream(m_handle);
 		m_created = false;
 	}

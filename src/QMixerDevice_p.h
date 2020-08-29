@@ -4,15 +4,15 @@
 #include <QList>
 #include <QAudioFormat>
 
-class QMixerStream;
+class QMixerDevice;
 class QAbstractMixerStream;
 
-class QMixerStreamPrivate
+class QMixerDevicePrivate
 {
-	friend class QMixerStream;
+	friend class QMixerDevice;
 
 	public:
-		QMixerStreamPrivate(const QAudioFormat &format);
+		QMixerDevicePrivate(const QAudioFormat &format);
 
 	private:
 		QList<QAbstractMixerStream *> m_streams;

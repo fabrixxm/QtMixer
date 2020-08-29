@@ -6,11 +6,15 @@
 #include "QtMixer.h"
 #include "QMixerStreamHandle.h"
 
+/**
+ * The QAbstractMixerStream class is the abstract type that
+ * defines sources of data for mixer channels
+ */
 class QAbstractMixerStream : public QIODevice
 {
 	Q_OBJECT
 
-	friend class QMixerStream;
+	friend class QMixerDevice;
 
 	public:
 		virtual void play() = 0;

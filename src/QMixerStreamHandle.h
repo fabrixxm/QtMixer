@@ -5,11 +5,15 @@
 
 class QAbstractMixerStream;
 class QAudioDecoderStream;
-class QMixerStream;
+class QMixerDevice;
 
+/**
+ * The QMixerStreamHandle class is the interface to control
+ * mixer channels
+ */
 class QTMIXER_EXPORT QMixerStreamHandle
 {
-	friend class QMixerStream;
+	friend class QMixerDevice;
 	friend class QAudioDecoderStream;
 
 	public:
