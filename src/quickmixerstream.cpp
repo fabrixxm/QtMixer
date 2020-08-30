@@ -1,5 +1,6 @@
 #include "quickmixerstream.h"
 #include "quickmixer.h"
+#include "QMixerDevice.h"
 #include <QDebug>
 
 QuickMixerStream::QuickMixerStream(QObject *parent)
@@ -43,6 +44,7 @@ void QuickMixerStream::setSource(QString source)
 	if (m_mixer != NULL) {
 		if (m_created == false) {
 			m_handle = m_mixer->openStream(source);
+			connect(m_mixer, &QMixerDevice::stateChanged, this, &QuickMixerStream::onHandleStateChange);
 		} else {
 			m_mixer->closeStream(m_handle);
 			m_handle = m_mixer->openStream(source);
@@ -142,17 +144,20 @@ void QuickMixerStream::stop()
 
 void QuickMixerStream::onHandleStateChange(QMixerStreamHandle handle, QtMixer::State state)
 {
-	Q_UNUSED(handle);
-	switch(state) {
-	case QtMixer::Paused:
-		pauseChanged();
-		break;
-	case QtMixer::Playing:
-		pauseChanged();
-		break;
-	case QtMixer::Stopped:
-		// do nothing
-		break;
+	if (m_handle == handle) {
+		qDebug() << "onHandleStateChange()" << state;
+
+		switch(state) {
+		case QtMixer::Paused:
+			pauseChanged();
+			break;
+		case QtMixer::Playing:
+			pauseChanged();
+			break;
+		case QtMixer::Stopped:
+			// do nothing
+			break;
+		}
+		stateChanged();
 	}
-	stateChanged();
 }
