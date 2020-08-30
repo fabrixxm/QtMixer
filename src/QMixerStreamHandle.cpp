@@ -10,7 +10,6 @@ QMixerStreamHandle::QMixerStreamHandle()
 QMixerStreamHandle::QMixerStreamHandle(QAbstractMixerStream *stream)
 	: m_stream(stream)
 {
-
 }
 
 void QMixerStreamHandle::play()

@@ -7,7 +7,7 @@
 
 QuickMixer::QuickMixer(QObject *parent)
 	: QObject(parent)
-	, m_mixerstream(NULL)
+	, m_mixer(NULL)
 {
 	const QAudioDeviceInfo &device = QAudioDeviceInfo::defaultOutputDevice();
 	const QAudioFormat &audioFormat = device.preferredFormat();
@@ -15,14 +15,14 @@ QuickMixer::QuickMixer(QObject *parent)
 	qDebug() << audioFormat;
 
 
-	m_mixerstream = new QMixerDevice(audioFormat);
+	m_mixer = new QMixerDevice(audioFormat);
 	m_output = new QAudioOutput(device, audioFormat, this);
 	m_output->setVolume(1);
-	m_output->start(m_mixerstream);
+	m_output->start(m_mixer);
 	//m_output->suspend();
 
 	connect(m_output, &QAudioOutput::stateChanged, this, &QuickMixer::outputStateChanged);
-	connect(m_mixerstream, &QMixerDevice::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
+	connect(m_mixer, &QMixerDevice::stateChanged, this, &QuickMixer::onMixerStreamStateChanged);
 }
 
 QuickMixer::~QuickMixer()
@@ -82,7 +82,7 @@ int QuickMixer::getState() const
 
 QMixerDevice *QuickMixer::getMixer()
 {
-	return m_mixerstream;
+	return m_mixer;
 }
 
 void QuickMixer::pause()
@@ -110,6 +110,7 @@ void QuickMixer::outputStateChanged(QAudio::State state)
 
 	stateChanged();
 }
+
 
 void QuickMixer::onMixerStreamStateChanged(QMixerStreamHandle handle, QtMixer::State state)
 {

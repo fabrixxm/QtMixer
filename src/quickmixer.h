@@ -12,7 +12,7 @@
 /**
 	\todo FIX DOCS!
 
-	QML Interface to QAudioOutput and QtMixerStream.
+	QML Interface to QAudioOutput and QMixerStream.
 
 	To be used with QuickMixerStream
 
@@ -77,7 +77,7 @@ signals:
 	void stateChanged();
 
 private:
-	QMixerDevice *m_mixerstream;
+	QMixerDevice *m_mixer;
 	QAudioOutput *m_output;
 	QList<QuickMixerStream *> m_streams;
 };

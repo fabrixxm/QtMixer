@@ -42,6 +42,7 @@ class QTMIXER_EXPORT QMixerStreamHandle
 		QMixerStreamHandle(QAbstractMixerStream *stream);
 
 		QAbstractMixerStream *m_stream;
+
 };
 
 #endif // QMIXERSTREAMHANDLE_H
